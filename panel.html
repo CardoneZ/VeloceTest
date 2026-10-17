@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Control y Trazabilidad en Tiempo Real | VeloceExpress</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dashboard-body">
+  <!-- Top Control Bar -->
+  <header class="dashboard-header">
+    <div class="container dashboard-header-inner">
+      <div class="dashboard-brand">
+        <span class="logo-icon">🛡️</span>
+        <div>
+          <h1>Panel de Control y Trazabilidad en Tiempo Real</h1>
+          <p>Monitoreo criptográfico de registros telefónicos y confirmación de códigos alfanuméricos (LFPDPPP / NOM-151)</p>
+        </div>
+      </div>
+
+      <div class="dashboard-header-actions">
+        <span class="sms-status-pill">
+          <span class="sms-pulse-dot"></span> Modo Testing: Sin Proveedor SMS
+        </span>
+        <span class="realtime-pill" id="realtimeConnBadge">
+          <span class="live-dot"></span> Sincronización en Vivo
+        </span>
+        <span class="admin-session-pill" id="adminSessionPill">
+          👤 <strong id="adminUserEmail">admin@proton.me</strong>
+        </span>
+        <button type="button" class="btn btn-secondary-outline btn-sm" id="adminLogoutBtn">
+          Cerrar Sesión
+        </button>
+        <a href="index.html" target="_blank" class="btn btn-secondary-outline btn-sm">
+          ↗ Abrir Página Pública
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container dashboard-main">
+    <!-- KPI Metrics Row -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-label">Total Números Asegurados</span>
+        <strong class="kpi-value" id="kpiTotal">0</strong>
+        <small class="kpi-sub">Cifrados con AES-256-GCM</small>
+      </div>
+      <div class="kpi-card kpi-warning">
+        <span class="kpi-label">Esperando Confirmación</span>
+        <strong class="kpi-value" id="kpiPending">0</strong>
+        <small class="kpi-sub">Con código activo en curso</small>
+      </div>
+      <div class="kpi-card kpi-success">
+        <span class="kpi-label">Verificados en Mercado</span>
+        <strong class="kpi-value" id="kpiVerified">0</strong>
+        <small class="kpi-sub">Autorizados para operar</small>
+      </div>
+      <div class="kpi-card kpi-info">
+        <span class="kpi-label">Eventos de Trazabilidad</span>
+        <strong class="kpi-value" id="kpiEvents">0</strong>
+        <small class="kpi-sub">Bitácora en tiempo real</small>
+      </div>
+    </section>
+
+    <!-- Main Dashboard Grid: Traceability Table + Real-Time Event Stream -->
+    <div class="dashboard-grid">
+      <!-- Left: Full Traceability Table -->
+      <section class="dashboard-panel">
+        <div class="dashboard-panel-header">
+          <div>
+            <h2>Matriz de Trazabilidad: Número ↔ Código Alfanumérico</h2>
+            <p>Vinculación directa en tiempo real entre el número registrado, su sobre cifrado y el código de confirmación.</p>
+          </div>
+          <div class="panel-actions-top" style="margin-bottom:0;">
+            <button type="button" class="btn btn-secondary-outline btn-sm" id="exportEncryptedBtn">
+              📥 Exportar Base Cifrada (.json)
+            </button>
+            <button type="button" class="btn btn-secondary-outline btn-sm" id="clearRecordsBtn">
+              🗑️ Limpiar Panel
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-table-wrapper dashboard-table-wrapper">
+          <table class="panel-table">
+            <thead>
+              <tr>
+                <th>ID Registro / Traza</th>
+                <th>Número Solicitante (SMS)</th>
+                <th>Código SMS Asignado</th>
+                <th>Entrada del Usuario (En Vivo)</th>
+                <th>Sobre Cifrado (AES-GCM)</th>
+                <th>Estado</th>
+                <th>Control</th>
+              </tr>
+            </thead>
+            <tbody id="panelRecordsBody">
+              <tr>
+                <td colspan="7" class="empty-row">Esperando registros desde la página principal en tiempo real...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Right: Live Traceability Timeline / Audit Feed -->
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h2>Bitácora en Vivo</h2>
+              <p>Flujo instantáneo de eventos entre el usuario y el panel.</p>
+            </div>
+          </div>
+          <div class="trace-feed" id="liveTraceFeed">
+            <div class="trace-empty">Sin eventos recientes.</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Admin Login Gate (Protected Portal) -->
+  <div class="admin-gate-overlay hidden" id="adminLoginGate">
+    <div class="admin-gate-card">
+      <button class="modal-close" id="closeGateBtn" aria-label="Cerrar modal">✕</button>
+      <div class="gate-icon">🛡️</div>
+      <h2>Acceso a Mi Portal de Administración</h2>
+      <p>Debes autenticarte como administrador autorizado para acceder al panel de trazabilidad y números solicitantes.</p>
+
+      <div id="gateFeedback" class="login-feedback hidden"></div>
+
+      <form id="gateLoginForm">
+        <div class="form-field">
+          <label for="gateEmailInput">Correo Autorizado (@proton.me)</label>
+          <input type="email" id="gateEmailInput" placeholder="admin@proton.me" required />
+        </div>
+        <div class="form-field">
+          <label for="gatePassInput">Contraseña de Administrador</label>
+          <input type="password" id="gatePassInput" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          Ingresar al Portal →
+        </button>
+        <a href="index.html" class="btn btn-secondary-outline btn-block" style="margin-top:10px; text-align:center; display:block;">
+          ← Volver a Página Pública
+        </a>
+      </form>
+    </div>
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>

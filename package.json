@@ -1,0 +1,21 @@
+{
+  "name": "veloce-express",
+  "version": "1.0.0",
+  "description": "VeloceExpress - Plataforma de Logística, Trazabilidad Criptográfica y Verificación",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "logistics",
+    "traceability",
+    "aes-256-gcm",
+    "realtime"
+  ],
+  "author": "VeloceExpress",
+  "license": "ISC",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

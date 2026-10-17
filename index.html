@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VeloceExpress | Soluciones de Logística y Paquetería</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top Utility Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-links">
+        <a href="#personas" class="active">Personas</a>
+        <a href="#empresas">Empresas</a>
+        <a href="#ecommerce">E-Commerce</a>
+      </div>
+      <div class="top-actions">
+        <a href="#ayuda">Centro de Ayuda</a>
+        <a href="#sucursales">Sucursales</a>
+        <span class="divider">|</span>
+        <span id="portalActionArea">
+          <button class="btn-portal" id="openLoginBtn">Mi Portal</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Header / Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Veloce<span>Express</span></span>
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <a href="#rastreo">Rastrear</a>
+        <a href="#cotizar">Cotizar Envío</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#cobertura">Cobertura</a>
+        <a href="#soluciones">Soluciones Logísticas</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a href="#cotizar" class="btn btn-primary">Enviar ahora</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Primary Section: Large Phone Registration & Alphanumeric Verification Box -->
+  <section class="register-hero" id="registro-principal">
+    <div class="container">
+      <div class="register-featured-box">
+        <div class="register-featured-badge-row">
+          <span class="featured-step-pill">PASO OBLIGATORIO DE ACCESO</span>
+          <span class="security-pill security-pill-lg">🔒 Cifrado Normativo LFPDPPP · AES-256-GCM</span>
+        </div>
+
+        <h1 class="register-featured-title">Registro y Verificación Telefónica</h1>
+        <p class="register-featured-sub">
+          Ingresa tu número celular para registrarte en nuestra base de datos segura y confírmalo con el código alfanumérico recibido para continuar operando en el mercado.
+        </p>
+
+        <!-- Step 1: Large Phone Input -->
+        <form id="phoneRegForm" class="reg-form reg-form-lg">
+          <div class="form-field">
+            <label for="phoneInput" class="label-lg">NÚMERO DE TELÉFONO CELULAR (10 DÍGITOS)</label>
+            <div class="phone-input-wrapper phone-input-wrapper-lg">
+              <span class="country-prefix country-prefix-lg">🇲🇽 +52</span>
+              <input
+                type="tel"
+                id="phoneInput"
+                placeholder="55 1234 5678"
+                maxlength="10"
+                pattern="[0-9]{10}"
+                required
+                autofocus
+              />
+            </div>
+          </div>
+
+          <label class="privacy-check privacy-check-lg">
+            <input type="checkbox" id="privacyConsent" checked required />
+            <span>Acepto el almacenamiento cifrado y la política de seguridad de archivos sensibles bajo normativa mexicana (LFPDPPP).</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary btn-block btn-xl" id="sendCodeBtn">
+            Registrar Número y Recibir Código Alfanumérico →
+          </button>
+        </form>
+
+        <!-- Step 2: Large Alphanumeric Code Confirmation -->
+        <form id="verifyCodeForm" class="reg-form reg-form-lg hidden">
+          <div class="step-banner step-banner-lg">
+            <span>📱 Número en proceso de verificación: <strong id="displayRegisteredPhone"></strong></span>
+            <button type="button" class="link-btn" id="changePhoneBtn">Cambiar número</button>
+          </div>
+
+          <div class="form-field">
+            <label for="alphaCodeInput" class="label-lg">CÓDIGO ALFANUMÉRICO DE CONFIRMACIÓN (6 CARACTERES)</label>
+            <input
+              type="text"
+              id="alphaCodeInput"
+              class="code-input code-input-lg"
+              placeholder="X9K4M2"
+              maxlength="6"
+              pattern="[A-Za-z0-9]{6}"
+              autocomplete="one-time-code"
+              required
+            />
+          </div>
+
+          <div class="verify-actions verify-actions-lg">
+            <button type="submit" class="btn btn-primary btn-block btn-xl">
+              ✓ Confirmar Registro y Continuar en el Mercado
+            </button>
+            <button type="button" class="btn btn-secondary-outline btn-block btn-lg" id="resendCodeBtn">
+              🔄 Reenviar código alfanumérico
+            </button>
+          </div>
+        </form>
+
+        <div id="registerResult" class="result-box result-box-lg hidden"></div>
+
+        <div class="panel-bar panel-bar-lg">
+          <span class="panel-status-note">
+            <span class="live-dot"></span> Conexión segura sincronizada en tiempo real (NOM-151 / LFPDPPP)
+          </span>
+          <span class="trace-id-pill" id="activeTraceBadge">ID Traza: En espera</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Secondary Hero Section with Logistics Widget -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <span class="badge">Logística Nacional e Internacional</span>
+        <h2>Conectamos tus envíos con cada rincón del país</h2>
+        <p>Entregas rápidas, seguras y con rastreo en tiempo real. Soluciones diseñadas para personas, emprendedores y grandes empresas.</p>
+        <div class="hero-stats">
+          <div>
+            <strong>+1,200</strong>
+            <span>Puntos de entrega</span>
+          </div>
+          <div>
+            <strong>24 hrs</strong>
+            <span>Envíos Día Siguiente</span>
+          </div>
+          <div>
+            <strong>99.4%</strong>
+            <span>Efectividad de entrega</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Logistics Widget (Tracking / Quote / Branches) -->
+      <div class="widget-card" id="rastreo">
+        <div class="widget-tabs" role="tablist">
+          <button class="tab-btn active" data-tab="tab-track">📦 Rastrear</button>
+          <button class="tab-btn" data-tab="tab-quote">🧮 Cotizar</button>
+          <button class="tab-btn" data-tab="tab-branch">📍 Sucursales</button>
+        </div>
+
+        <!-- Tab 1: Tracking -->
+        <div class="tab-panel active" id="tab-track">
+          <h3>Rastrea tu envío</h3>
+          <p class="tab-sub">Ingresa hasta 10 números de guía o código de rastreo separados por coma.</p>
+          <form id="trackForm">
+            <div class="input-group">
+              <input
+                type="text"
+                id="trackingInput"
+                placeholder="Ej. VX-94820194, VX-10293847"
+                required
+              />
+              <button type="submit" class="btn btn-primary">Rastrear</button>
+            </div>
+          </form>
+          <div id="trackResult" class="result-box hidden"></div>
+        </div>
+
+        <!-- Tab 2: Quote Calculator -->
+        <div class="tab-panel" id="tab-quote">
+          <h3>Cotiza tu envío en segundos</h3>
+          <form id="quoteForm" class="quote-form">
+            <div class="form-row">
+              <div class="form-field">
+                <label for="originZip">C.P. Origen</label>
+                <input type="text" id="originZip" placeholder="06600" maxlength="5" required />
+              </div>
+              <div class="form-field">
+                <label for="destZip">C.P. Destino</label>
+                <input type="text" id="destZip" placeholder="64000" maxlength="5" required />
+              </div>
+            </div>
+            <div class="form-row four-cols">
+              <div class="form-field">
+                <label for="pkgWeight">Peso (kg)</label>
+                <input type="number" id="pkgWeight" value="2" min="0.5" step="0.5" required />
+              </div>
+              <div class="form-field">
+                <label for="pkgL">Largo (cm)</label>
+                <input type="number" id="pkgL" value="30" min="1" required />
+              </div>
+              <div class="form-field">
+                <label for="pkgW">Ancho (cm)</label>
+                <input type="number" id="pkgW" value="20" min="1" required />
+              </div>
+              <div class="form-field">
+                <label for="pkgH">Alto (cm)</label>
+                <input type="number" id="pkgH" value="15" min="1" required />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Calcular Tarifa</button>
+          </form>
+          <div id="quoteResult" class="result-box hidden"></div>
+        </div>
+
+        <!-- Tab 3: Branch Locator -->
+        <div class="tab-panel" id="tab-branch">
+          <h3>Encuentra tu sucursal más cercana</h3>
+          <p class="tab-sub">Busca por código postal, ciudad o alcaldía.</p>
+          <form id="branchForm">
+            <div class="input-group">
+              <input type="text" id="branchQuery" placeholder="Ej. Monterrey, CDMX o 44100" required />
+              <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+          </form>
+          <div id="branchResult" class="result-box hidden"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Action Bar -->
+  <section class="quick-strip">
+    <div class="container quick-grid">
+      <a href="#guia-prepago" class="quick-item">
+        <span class="quick-icon">🏷️</span>
+        <div>
+          <h4>Guías Prepagadas</h4>
+          <p>Ahorra hasta 35% en paquetes frecuentes</p>
+        </div>
+      </a>
+      <a href="#recoleccion" class="quick-item">
+        <span class="quick-icon">🚚</span>
+        <div>
+          <h4>Programa Recolección</h4>
+          <p>Pasamos por tus paquetes a domicilio</p>
+        </div>
+      </a>
+      <a href="#facturacion" class="quick-item">
+        <span class="quick-icon">🧾</span>
+        <div>
+          <h4>Facturación Electrónica</h4>
+          <p>Descarga tu CFDI en menos de 1 minuto</p>
+        </div>
+      </a>
+      <a href="#internacional" class="quick-item">
+        <span class="quick-icon">🌎</span>
+        <div>
+          <h4>Envíos Internacionales</h4>
+          <p>Cobertura en más de 220 países</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services-section" id="servicios">
+    <div class="container">
+      <div class="section-header">
+        <span>NUESTROS SERVICIOS</span>
+        <h2>Soluciones a la medida de cada entrega</h2>
+        <p>Elige la velocidad y modalidad ideal para tus documentos, paquetes o carga pesada.</p>
+      </div>
+
+      <div class="services-grid">
+        <article class="service-card">
+          <div class="service-badge">Más rápido</div>
+          <div class="service-icon">⚡</div>
+          <h3>Día Siguiente</h3>
+          <p>Entrega garantizada al día hábil siguiente en las principales ciudades del país antes de las 12:00 hrs.</p>
+          <ul class="service-features">
+            <li>✓ Rastreo GPS en tiempo real</li>
+            <li>✓ Seguro básico incluido</li>
+            <li>✓ Dos intentos de entrega</li>
+          </ul>
+          <a href="#rastreo" class="service-link" data-open-tab="tab-quote">Cotizar Día Siguiente →</a>
+        </article>
+
+        <article class="service-card featured">
+          <div class="service-badge">Mejor valor</div>
+          <div class="service-icon">📦</div>
+          <h3>Terrestre Estándar</h3>
+          <p>La opción más rentable para envíos nacionales de paquetes y cajas con entrega de 2 a 5 días hábiles.</p>
+          <ul class="service-features">
+            <li>✓ Hasta 68 kg por paquete</li>
+            <li>✓ Cobertura nacional extendida</li>
+            <li>✓ Notificaciones por correo y SMS</li>
+          </ul>
+          <a href="#rastreo" class="service-link" data-open-tab="tab-quote">Cotizar Terrestre →</a>
+        </article>
+
+        <article class="service-card">
+          <div class="service-badge">Empresas</div>
+          <div class="service-icon">🏗️</div>
+          <h3>Carga Consolidada (LTL)</h3>
+          <p>Transporte de tarimas, pallets y mercancía de alto volumen con tarifas preferenciales para negocios.</p>
+          <ul class="service-features">
+            <li>✓ Recolección con unidad dedicada</li>
+            <li>✓ Monitoreo 24/7 en ruta</li>
+            <li>✓ Evidencia digital de entrega (POD)</li>
+          </ul>
+          <a href="#rastreo" class="service-link" data-open-tab="tab-quote">Cotizar Carga →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- E-Commerce Banner -->
+  <section class="promo-banner" id="soluciones">
+    <div class="container promo-inner">
+      <div class="promo-text">
+        <span class="badge badge-light">INTEGRACIONES E-COMMERCE</span>
+        <h2>Conecta tu tienda en línea en minutos</h2>
+        <p>Automatiza la generación de guías, cálculo de tarifas en el checkout y notificaciones a tus clientes con nuestros plugins para Shopify, WooCommerce, Magento y API REST.</p>
+        <div class="promo-buttons">
+          <button class="btn btn-white">Explorar Integraciones</button>
+          <button class="btn btn-outline-white">Ver Documentación API</button>
+        </div>
+      </div>
+      <div class="promo-cards">
+        <div class="integration-pill">🛍️ Shopify</div>
+        <div class="integration-pill">🟣 WooCommerce</div>
+        <div class="integration-pill">🛒 Mercado Envíos</div>
+        <div class="integration-pill">⚙️ API REST / Webhooks</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo footer-logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">Veloce<span>Express</span></span>
+        </a>
+        <p>Plataforma integral de mensajería, paquetería y soluciones logísticas para impulsar tu negocio.</p>
+        <p class="footer-phone">📞 Atención al cliente: <strong>800 123 4567</strong></p>
+      </div>
+
+      <div>
+        <h4>Herramientas</h4>
+        <ul>
+          <li><a href="#rastreo">Rastrear envío</a></li>
+          <li><a href="#rastreo">Cotizador de tarifas</a></li>
+          <li><a href="#rastreo">Buscador de códigos postales</a></li>
+          <li><a href="#facturacion">Facturación en línea</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="#servicios">Mensajería Express</a></li>
+          <li><a href="#servicios">Paquetería Terrestre</a></li>
+          <li><a href="#servicios">Carga Aérea y LTL</a></li>
+          <li><a href="#soluciones">Fulfillment para E-Commerce</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Legal y Soporte</h4>
+        <ul>
+          <li><a href="#aviso">Aviso de Privacidad</a></li>
+          <li><a href="#terminos">Términos y Condiciones</a></li>
+          <li><a href="#prohibidos">Artículos Prohibidos</a></li>
+          <li><a href="#embalaje">Guía de Embalaje</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© 2026 VeloceExpress Logística S.A. de C.V. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div class="modal-backdrop hidden" id="loginModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeLoginBtn" aria-label="Cerrar">✕</button>
+      <div class="modal-header-icon">🛡️</div>
+      <h3>Acceso a Mi Portal</h3>
+      <p>Panel de Administración, Control y Trazabilidad Operativa.</p>
+
+      <div id="loginFeedback" class="login-feedback hidden"></div>
+
+      <form id="loginForm">
+        <div class="form-field">
+          <label for="emailInput">Correo Electrónico (@proton.me)</label>
+          <input type="email" id="emailInput" placeholder="admin@proton.me" required />
+        </div>
+        <div class="form-field">
+          <label for="passInput">Contraseña de Administrador</label>
+          <input type="password" id="passInput" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+          Acceder a Mi Portal →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
